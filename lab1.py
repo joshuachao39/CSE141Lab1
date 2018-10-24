@@ -54,4 +54,33 @@ def decrypt():
         IV = IV << 1
         IV[0] = parity
 
-def 
+def fixedToFloat(I):
+    sign_bit = I[15]
+    exponent = 29
+    mantissa = I
+    while mantissa[15] == 0:
+        mantissa = mantissa << 1
+        exponent -= 1
+    # rounding
+    if mantissa[4] == 1 and mantissa[3] == 1: # clearly above half
+        mantissa += 8
+
+    # potentially on the cusp
+    if mantissa[4] == 1 and mantissa[3] == 0:
+        isNotCusp = mantissa[0] or mantissa[1] or mantissa[2]
+        # not on the cusp, so just round up
+        if isNotCusp == 1:
+            mantissa += 8
+        else:
+            # round to nearest even; if mantissa is already odd, nearest even is one up
+            if mantissa[5] == 1:
+                mantissa += 8
+
+    # overflow
+    if mantissa[15] == 1:
+        mantissa = mantissa >> 1
+        exponent += 1
+
+    return sign_bit.concat(exponent).concat(mantissa)
+
+def floatToFixed(F):
