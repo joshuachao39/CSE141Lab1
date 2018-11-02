@@ -76,7 +76,7 @@ def fixedToFloat(I):
             if mantissa[5] == 1:
                 mantissa += 8
 
-    # overflow
+    # overflow. Alternatively, check if everything is a 0.
     if mantissa[15] == 1:
         mantissa = mantissa >> 1
         exponent += 1
@@ -84,3 +84,59 @@ def fixedToFloat(I):
     return sign_bit.concat(exponent).concat(mantissa)
 
 def floatToFixed(F):
+    sign_bit = F[15]
+    biasedExponent = F[14:10]
+    mantissa = F[9:0]
+    mantissa[10] = 1
+    exponent = biasedExponent - 15
+    # always rounded to 0
+    if exponent < -1:
+        return sign_bit + "000000000000000"
+    if exponent == -1:
+        # always rounded to 1
+        if mantissa[9] == 1:
+            return sign_bit + "000000000000001"
+        else:
+            # everything is 0, round to 0
+            if or(mantissa[8] .. mantissa[0]) == 0:
+                return sign_bit + "000000000000000"
+            # gotta round up
+            else:
+                return sign_bit + "000000000000001"
+    # just hardcode overflow
+    if exponent == 15 or exponent == 16:
+        return sign_bit + "111111111111111"
+    # weird rounding corner case, no sticky bits
+    if exponent == 9:
+        # always round down
+        if mantissa[0] == 0:
+            mantissa.shift_right(1)
+        # nearest even
+        else:
+            # it's odd, round up
+            if mantissa[1] == 1:
+                mantissa.shift_right(1)
+                mantissa += 1
+            else:
+                mantissa.shift_right(1)
+        mantissa[15] = sign_bit
+        return mantissa
+    # dont need to worry about truncation, just add zeroes
+    if exponent > 9:
+        mantissa.shift_left(exponent-10)
+        mantissa[15] = sign_bit
+        return mantissa
+    # exponent is 0-8 inclusive
+    else:
+        sticky = 0
+        round = mantissa[9-exponent]
+        for _ in range(10-exponent):
+            sticky |= mantissa[0]
+            mantissa.shift_right(1)
+        if round == 1:
+            # if sticky, then we always round up. if not sticky, we round up if mantissa is odd
+            if sticky == 1 or mantissa[0] == 1:
+                mantissa += 1
+
+        mantissa[15] = sign_bit
+        return mantissa
