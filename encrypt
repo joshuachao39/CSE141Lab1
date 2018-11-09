@@ -1,0 +1,38 @@
+lb $r0, 61($zero) # r0 <- # of required prepended spaces
+lb $r1, 62($zero) # r1 <- LFSR tap sequence
+lb $r2, 63($zero) # r2 <- curr LFSR state
+li $r3, 0         # r3 <- i = 0
+
+encryptSpaces:
+  xor $r4, 0x20, $r2 # r4 <- encrypted space
+
+  # need to calculate next LFSR state
+  and $r5, $r2, $r1 # tapping the LFSR state w/ seq
+  xorAll $r5, $r5   # xorAll = xor all the bits, unique instruction.
+                    # r5 <- parity of tapped bits
+  sll $r2, 1
+  or $r2, $r2, $r5  # $r2 has updated next LSFR state
+  sw $r4, 64($r3)
+  add $r3, $r3, 1   # i++
+  bne $r3, $r0, encryptSpaces
+
+
+  li $r3, 0  # r3 <- i = 0
+  li $r4, 59 # Assuming every message is exactly 59 bytes long.
+             # r4 <- chars left
+
+encryptMessage:
+  lb $r5, 0($r3)      # r5 <- clearbyte
+  xor $r5, $r5, $r2   # r5 <- cipherbyte
+
+  # need to calculate next LFSR state
+  and $r6, $r2, $r1
+  xorAll $r6, $r6, $r1  # parity of tapped bits
+  sll $r2, 1
+  or $r2, $r2, $r6      # r2 has updated next LSFR state
+  add $r7, $r0, $r3     # r7 <- where to store cipherbyte
+  sw $r5, 0($r7)
+  add $r3, $r3, 1       # i++
+  bne $r3, $r4, encryptMessage
+
+  # set done flag somewhere
