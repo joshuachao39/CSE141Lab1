@@ -1,0 +1,99 @@
+floatToFixed:
+  lw $r0, 133($zero) #$r0 = msw
+  lw $r1, 134($zero) #$r1 = lsw
+  and $r2, $r0, 0x80 #$r2 = sign bit
+  and $r3, $r0, 0x7c
+  srl $r3, 2 #$r3 = exponent
+  and $r0, $r0, 0x03
+  or $r0, $r0, 0x04 #$r0+$r1 is now mantissa
+  sub $r3, $r3 15 #non biased exponent
+  bge $r3, -1, expCheckNegOne
+loadZero:
+  li $r0, 0x00
+  li $r1, 0x00
+  be $zero, $zero, loadAnswer
+expCheckNegOne: #exp is -1
+  bge $r3, -1, checkOverflow
+  and $r4, $r0, 0x02 #$r4 = s1
+  bne $r4, 0x02, checkCuspRounding
+loadOne:
+  li $r0, 0x00
+  li $r1, 0x01
+  beq $zero, $zero, loadAnswer
+checkCuspRounding:
+  bne $r1, $zero, loadOne
+  and $r4, $r0, 0x01 #$r4 = s2
+  bne $r4, $zero, loadOne #s2 is 0, then round up
+  beq $zero, $zero, loadZero #s2 is 1
+checkOverflow:
+  blt $r3, 15, expZeroToFourteenInc
+overflow: #exp is 15 or 16
+  li $r0, 0xff
+  li $r1, 0xff
+  beq $zero, $zero, loadAnswer
+expZeroToFourteenInc:
+  blt $r3, 10, expZeroToNineInc
+  sub $r4, $r4, 10 #$r4 = amount to shift left by
+  shld $r0, $r1, $r4 #shift left across two regs
+  sll $r0, $r4
+  beq $zero, $zero, loadAnswer
+expZeroToNineInc:
+  blt $r3, 9, expZeroToEightInc
+  and $r4, $r1, 0x01 #$r4 stores rounding bit
+  shrd $r1, $r0, 1
+  srl $r1, 1
+  beq $r4, $zero, loadAnswer
+  and $r4, $r1, 0x01 #$r4 stores parity bit
+  beq $r4, $zero, loadAnswer
+  addacross $r0, $r1, 1
+  beq $zero, $zero, loadAnswer
+expZeroToEightInc:
+  blt $r3, 3, expZeroToOneInc
+  li $r4, 0x01 #$r4 round
+  li $r5, 0x01 #$r5 sticky
+  sub $r6, 9, $r3
+  sll $r4, $r6
+  sub $r5, $r6, 1
+  and $r4, $r1, $r4
+  and $r5, $r1, $r5
+  sub $r6, 10, $r3 #$r6 stores amount to shift by
+  shrd $r1, $r0, $r6
+  srl $r0, $r6
+  beq $r4, $zero, loadAnswer
+  beq $r5, $zero, determineCusp
+  addacross $r0, $r1, 1
+  beq $zero, $zero, loadAnswer
+determineCusp:
+  and $r4, $R1, 0x01
+  beq $r4, $zero, loadAnswer
+  addacross $r0, $r1, 1
+  beq $zero, $zero loadAnswer
+expZeroToOneInc:
+  beq $r3, $zero, expZero
+  and $r4, $r0, 0x01 #$r4 stores round
+  add $r5, $zero, $r1 #$r5 stores sticky
+  srl $r0, 1
+  add $r1, $r0, $zero
+  li $r0, 0
+  beq $r4, $zero, loadAnswer
+  beq $r5, $zero, determineCusp
+  addacross $r0, $r1, 1
+  beq $zero, $zero, loadAnswer
+expZero:
+  and $r3, $r0, 0x02 #$r3 stores round
+  and $r4, $r0, 0x01 #$r4 stores sticky
+  add $r5, $r1, $zero #s2
+  srl $r0, 2
+  add $r1, $r0, $zero
+  li $r0, $zero
+  beq $r3, $zero, loadAnswer
+  bne $r4, $zero, addOne
+  bne $r5, $zero, addOne
+  beq $zero, $zero, determineCusp
+addOne:
+  addacross $r0, $r1, 1
+  beq $zero, $zero loadAnswer
+loadAnswer:
+  or $r0, $r2, $r0
+  sw $r0, 136($zero)
+  sw $r1, 137($zero)
