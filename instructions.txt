@@ -1,0 +1,86 @@
+Loads
+=====
+
+1. lb $rt, offset(rs) 
+   R[rt] = {24'b0, M[R[rs] + SignExtImm](7:0)}
+
+2. lw $rt, offset($rs)
+   R[rt] = MEM[R[rs] + offset]
+
+3. li $rd, imm
+   R[rd] = SignExtImm
+
+Stores
+======
+
+1. sw $rt, offset($rs)
+   MEM[R[rs]+offset] = R[rt]
+
+2. sb $rt, offset($rs)
+   MEM[$rs + offset] = (oxff & R[rt])
+
+Arithmetic
+==========
+
+1. xor $rd, $rs, $rt
+   R[rd] = R[rs] ^ R[rt]
+
+2. xori $rt, $rs, imm
+   R[rt] = R[rs] ^ imm
+
+3. xorAll $rd, $rs
+   R[rd] = rs[0] ^ rs[1] ^ rs[2] .... rs[8]
+
+4. and $rd, $rs, $rt
+   R[rd] = R[rs] & R[rt]
+
+5. andi $rt, $rs, imm
+   R[rt] = R[rs] & imm
+
+6. or $rd, $rs, $rt
+   R[rd] = R[rs] | R[rt]
+
+7. sll $rd, $rt, h
+   R[rd] = R[rt] << h
+
+8. srl $rd, $rt, h
+   R[rd] = R[rt] >> h
+
+9. shld $rd, $rs, h
+   Shifts R[rd] to the left by h, bits to the right are filled by R[rs]
+
+10. shrd $rd, $rs, h
+    Shifts R[rd] to the right by h, bits to the left are filled by R[rs]
+   
+11. add  $rd, $rs, $rt
+    R[rd] = R[rs] + R[rt]
+
+12. addi $rt, $rs, imm
+    R[rt] = R[rs] + imm
+   
+13. addacross $rd, $rs, h
+    R[rd].R[rs] = R[rd].R[rs] + h
+    
+Branches
+========
+
+1. bne $rs, $rt, offset
+   If $rs != $rt, advance pc by offset 
+
+2. beq $rs, $rt, offset
+   If $rs == $rt, advance pc by offset 
+
+3. bge $rs, $rt, offset
+   If $rs >= $rt, advance pc by offset 
+
+4. blt $rs, $rt, offset
+   If $rs < $rt, advance pc by offset 
+
+5. ble $rs, $rt, offset
+   If $rs <= $rt, advance pc by offset 
+
+Other
+=====
+
+1. getParity $rs, $rt, $rd
+   R[rs] = Parity bit after R[rt] is tapped with R[rd]th tap sequence
