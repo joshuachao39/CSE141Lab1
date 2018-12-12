@@ -1,0 +1,26 @@
+lb $r0,61($r0)
+lb $r1,62($r0)
+lb $r2,63($r0)
+li $r3,0
+encryptSpaces:
+xori $r4,$r2,32
+and $r5,$r2,$r1
+xorAll $r5,$r5
+sll $r2,$r2,1
+or $r2,$r2,$r5
+sw $r4,64($r3)
+addi $r3,$r3,1
+bne $r3,$r0,4
+li $r3,0
+li $r4,59
+encryptMessage:
+lb $r5,0($r3)
+xor $r5,$r5,$r2
+and $r6,$r2,$r1
+xorAll $r6,$r1
+sll $r2,$r2,1
+or $r2,$r2,$r6
+add $r7,$r0,$r3
+sw $r5,0($r7)
+addi $r3,$r3,1
+bne $r3,$r4,14
