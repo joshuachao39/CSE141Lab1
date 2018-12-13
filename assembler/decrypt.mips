@@ -1,94 +1,66 @@
 decrypt:
-
-lb $r0, $r0(###)  # r0 first byte, ### -> address of input 
-xor $r1, $r0, 0x20  # r1 has the ogIV
-li  $r2, 0x0
-
+lb $r0,64($r0)
+xor $r1,$r0,32
+li  $r2,0
 initLoop:
-sb $r2(temp_ivs), $r1  # storing ogIV in the tempIV memory location
-add $r2, $r2, 1
-ble $r2, 7, initLoop:
-
-li $r2, 0xff 		  # r2 = candidate taps
-li $r3, 0x1           # r3 = loop counter
-
-tapLoop:              # check 9 bytes
-
+sb $r2(temp_ivs),$r1
+add $r2,$r2,1
+ble $r2,7,initLoop
+li $r2,255
+li $r3,1
+tapLoop:
 lb $r0, $r3(###)	  # r0 = current byte
-xor $r4, $r0, 0x20    # r4 = mutated_IV
-
-li $r5, 0		  # r5 = inner loop counter (ts_idx)
-
+xor $r4,$r0,32
+li $r5,0
 innerLoop:
-
-sl  $r6, 0x1, $r5      # r6 = 1 << r5
-and $r6, $r6, $r2      # r6 = r5th bit of candidate taps
-
-beq $r6, 0, innerLoopEnd  # if disqualified, skip
-
-lb $r6, $r5(temp_iv)      # r6 = prevIV
-getParity $r7, $r6, $r5   # r7 = parity after (prevIv is tapped with r5th tap_seq)
-sll $r6, $r6, 0x1         # prevIv << 1
-or  $r6, $r6, $r7         # prevIv = prevIv | parityBit
-
-bne $r6, $r4, setZero     # if prevIv != mutated_IV, set zero
-
-sb  $r5(temp_iv), $r6     # update temp_iv at that index
+sl  $r6,1,$r5
+and $r6,$r6,$r2
+beq $r6,0,innerLoopEnd
+lb $r6,$r5(temp_iv)
+getParity $r7,$r6,$r5
+sll $r6,$r6,1
+or  $r6,$r6,$r7
+bne $r6,$r4,setZero
+sb  $r5(temp_iv),$r6
 ba  innerLoopEnd
-
 setZero:
-sl $r6, $0x1, $r5         # r6 = 1 << r5
-or $r2, $r2, $r6          # candidate taps = candidate taps | r6
-
+li $r7,1
+sl $r6,$r7,$r5
+or $r2,$r2,$r6
 innerLoopEnd:
-
-add $r5, $r5, 1
-bl  $r5, 0x9, innerLoop
-
-
-
-li  $r5, 0
-
+add $r5,$r5,1
+bl  $r5,0x9,innerLoop
+li  $r5,0
 getIndexLoop:
-and $r3, $r2, 0x1           # r3 = r2 & 1
-beq $r3, 0x1, endIndexLoop  # if the first bit of candidate_bits is 1, end
-
-add $r5, $r5, 1	        # r5++
-srl $r2, $r2, 0x1           # r2 = r2 >> 1
-
+and $r3,$r2,0x1
+beq $r3,0x1,endIndexLoop
+add $r5,$r5,1
+srl $r2,$r2,0x1
 endIndexLoop:
-
-lb $r2, $r5(tap_seq_addr)   # r2 = correct tap seq
-lb $r3, $r5(temp_iv)        # r3 = IV
-li $r4, 0x9                 # r4 = loop counter
-
+lb $r2,$r5(tap_seq_addr)
+lb $r3,$r5(temp_iv)
+li $r4,0x9
 decodeLoop:
-
-lb $r5, $r4(program2_addr)  # r5 = current char
-xor $r6, $r3, $r5           # r6 = decoded char
-getParity $r7, $r3, $r2          # r7 = parity bit
-sll $r3, $r3, 1             # IV << 1
-or  $r3, $r3, $r7           # r3 = r3 | r7
-
-bne $r6, 0x20, decodeLoopEnd # if decoded char != space, end
-add $r4, $r4, 1
+lb $r5,$r4(program2_addr)
+xor $r6,$r3,$r5
+getParity $r7,$r3,$r2
+sll $r3,$r3,1
+or  $r3,$r3,$r7
+bne $r6,0x20,decodeLoopEnd
+add $r4,$r4,1
 ba decodeLoop
-
 decodeLoopEnd:
-
-add $r6, $r4, $zero         # r6 (numSpaces) = r4
-beq $r6, 129, decodeEnd
-
+add $r6,$r4,$zero
+beq $r6,129,decodeEnd
 finalLoop:
-lb  $r5, $r4(program2_addr)  # r5 = next char
-xor $r6, $r5, $r3            # r6 = char XOR IV
-sub $r7, $r4, $r6            # r7 = i - numSpaces
-sb  $r7(program1_addr), $r6  # store r6 in program1_addr + (i-numSpaces)  
-getParity $r8, $r3, $r2
-sll $r3, $r3, 0x1            # IV << 1
-or  $r3, $r3, $r8
-add $r4, $r4, 0x1
-bne $r4, 129, decodeEnd
-
+lb  $r5,$r4(program2_addr)
+xor $r6,$r5,$r3
+sub $r7,$r4,$r6
+sb  $r7(program1_addr),$r6
+getParity $r8,$r3,$r2
+sll $r3,$r3,0x1
+or  $r3,$r3,$r8
+add $r4,$r4,0x1
+bne $r4,129,decodeEnd
 decodeEnd:
 

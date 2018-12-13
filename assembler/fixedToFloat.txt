@@ -1,52 +1,45 @@
-fixedToFloat:
-  lw $r0, 128($zero) #msw = $r0
-  lw $r1, 129($zero) #lsw = $r1
-  and $r2, $r0, 0x80 #sign bit = $r2
-  li $r3, 29 #exponent = $r3
-  shld $r0, $r1, 1
-  sll $r1, $r1, 1
-  or $r5, $r0, $r1
-  bne $r5, $zero, checkOne
-  and $r0, $r2, $r1
-  sw $r0, 131($zero)
-  sw $r1, 132($zero)
-checkOne:
-  and $r4, $r0, 0x80 #r4 stores msb == 1
-  beq $r4, 0x80, foundFirstOne
-findFirstOne:
-  sub $r3, $r3, 1
-  #shift left by 1
-  shld $r0, $r1, 1
-  sll $r1, $r1, 1
-  beq $zero, $zero, checkOne
-foundFirstOne:
-  and $r4, $r1, 0x10
-  and $r5, $r1, 0x08
-  bne $r4, 0x08, secondRoundCheck
-  bne $r5, 0x04, secondRoundCheck
-  #special instruction to add across two seperate bytes
-  addacross $r0, $r1, 8
-  be $zero, $zero, checkOverflow
-secondRoundCheck:
-  bne $r4, $zero, checkOverflow
-  bne $r5, 0x04, checkOverflow
-  and $r6, $r1, 15 #$r6 holds last 4 bits of lsw
-  beq $r6, $zero, checkOverflow
-  #special instruction to add across two seperate bytes
-  addacross $r0, $r1, 8
-checkOverflow:
-  bne $r0, $zero, loadAnswer
-  bne $r1, $zero, loadAnswer
-  add $r3, $r3, 1
-  li $r0, 0x80
-loadAnswer:
-  li $r4, 0
-  li $r5, 0
-  or $r4, $r2 #moves sign bit
-  sll $r3, 2
-  or $r4, $r4, $r3 #move exponent
-  shrd $r1, $r0, 6
-  srl $r0, 6
-  or $r4, $r4, $r0 #moves msw
-  sw $r4, 131($zero)
-  sw $r1, 132($zero)
+lw $r0,128($r0)
+lw $r1,129($r0)
+andi $r2,$r0,128
+li $r3,29
+shld $r0,$r1,1
+sll $r1,$r1,1
+or $r5,$r0,$r1
+bne $r5,$r0,89
+and $r0,$r2,$r1
+sw $r0,131($r0)
+sw $r1,132($r0)
+andi $r4,$r0,128
+li $r7,128
+beq $r4,$r7,96
+addi $r3,$r3,-1
+shld $r0,$r1,1
+sll $r1,$r1,1
+beq $r0,$r0,89
+andi $r4,$r1,16
+andi $r5,$r1,8
+li $r7,8
+bne $r4,$r7,104
+li $r7,4
+bne $r5,$r7,104
+addacross $r0,$r1,8
+beq $r0,$r0,109
+bne $r4,$r0,109
+bne $r5,$r7,109
+andi $r6,$r1,15
+beq $r6,$r0,109
+addacross $r0,$r1,8
+bne $r0,$r0,113
+bne $r1,$r0,113
+addi $r3,$r3,1
+li $r0,128
+li $r4,0
+li $r5,0
+or $r4,$r4,$r2
+sll $r3,$r3,2
+or $r4,$r4,$r3
+shrd $r1,$r0,6
+srl $r0,$r0,6
+or $r4,$r4,$r0
+sw $r4,131($r0)
+sw $r1,132($r0)

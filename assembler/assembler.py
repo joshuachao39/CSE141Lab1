@@ -11,38 +11,130 @@ def parseAddr(str):
     regNum = getRegNum(stuff[1][0:3])
     return (regNum, imm)
 
+
+aluOp = {
+    "xor":"5'b00000",
+    "xorAll":"5'b00001",
+    "and": "5'b00010",
+    "or":"5'b00011",
+    "sll":"5'b00100",
+    "srl":"5'b00101",
+    "shld":"5'b00110",
+    "shrd":"5'b00111",
+    "add":"5'b01000",
+    "addacross":"5'b01001",
+    "getParity":"5'b01010",
+    "mem":"5'b01011",
+    "xori":"5'b01100",
+    "andi":"5'b01101",
+    "addi":"5'b01110",
+    "bne":"5'b01111",
+    "beq":"5'b10000",
+    "bge":"5'b10001",
+    "blt":"5'b10010",
+    "ble":"5'b10011",
+    "lb":"5'b01011",
+    "lw":"5'b01011",
+    "li":"5'b01011",
+    "sw":"5'b01011",
+    "sb":"5'b01011",
+}
+
+memRead = {"lb", "lw"}
+memWrite = {"sw", "sb"}
+rfDontWrite = {"sw", "sb", "bne", "beq", "bge", "blt", "ble"}
+
 def makeBin (num, length):
     bin = format(num, 'b')
     while (len(bin) < length):
         bin = '0' + bin
     return bin
 
-def printIType(op, rs, rt, imm, outfile, line):
+def printIType(op, rs, rt, imm, outfile, line, instr, index):
     op = makeBin(op, 4)
     rs = makeBin(rs, 4)
     rt = makeBin(rt, 4)
     imm = makeBin(imm, 8)
+    index = makeBin(index,9)
 
     with open(outfile, "a") as text_file:
         str = op + rs + rt + imm + "\n"
         print 'I: ' + str
         text_file.write(str)
 
-def printRType(op, rs, rt, rd, shamt, funct, outfile, line):
+    rs = "4'b" + rs
+    rt = "4'b" + rt
+    rd = "4'b0000"
+    imm = "8'b" + imm
+    index = "9'b" + index
+
+    if instr in memRead:
+        mem_read = "1'b1"
+    else:
+        mem_read = "1'b0"
+
+    if instr in memWrite:
+        mem_write = "1'b1"
+    else:
+        mem_write = "1'b0"
+
+    if instr in rfDontWrite:
+        rf_write = "1'b0"
+    else:
+        rf_write = "1'b1"
+
+    alu_op = aluOp[instr]
+    out = "// " + line + "\n" + index + ": begin\n"+"  mem_read = "+mem_read+";\n  mem_write = "+mem_write+";\n  rf_write = "+rf_write+";\n  aluOp = "+alu_op+";\n  rs_addr = "+rs+ ";\n  rt_addr = "+rt + ";\n  rd_addr = " + rd + ";\n  imm = "+imm + ";\n end\n\n"
+
+    with open("verilog.txt", "a") as text_file:
+        text_file.write(out)
+
+def printRType(op, rs, rt, rd, shamt, funct, outfile, line, instr, index):
     op = makeBin(op, 4)
     rs = makeBin(rs, 4)
     rt = makeBin(rt, 4)
     rd = makeBin(rd, 4)
+    pshamt = makeBin(shamt, 8)
     shamt = makeBin(shamt, 4)
     funct = makeBin(funct, 4)
+    index = makeBin(index,9)
 
     with open(outfile, "a") as text_file:
         str = op + rs + rt + rd + shamt + funct + "\n"
         print 'R: ' + str
         text_file.write(str)
 
+    rs = "4'b" + rs
+    rt = "4'b" + rt
+    rd = "4'b" + rd
+    imm = "8'b" + pshamt
+    index = "9'b" + index
+
+    if instr in memRead:
+        mem_read = "1'b1"
+    else:
+        mem_read = "1'b0"
+
+    if instr in memWrite:
+        mem_write = "1'b1"
+    else:
+        mem_write = "1'b0"
+
+    if instr in rfDontWrite:
+        rf_write = "1'b0"
+    else:
+        rf_write = "1'b1"
+
+    alu_op = aluOp[instr]
+
+    out = "// " + line + "\n" + index + ":\n begin\n"+"  mem_read = "+mem_read+";\n  mem_write = "+mem_write+";\n  rf_write = "+rf_write+";\n  aluOp = "+alu_op+";\n  rs_addr = "+rs+ ";\n  rt_addr = "+rt + ";\n  rd_addr = " + rd + ";\n  imm = "+imm + ";\n end\n\n"
+
+    with open("verilog.txt", "a") as text_file:
+        text_file.write(out)
+
 filename = sys.argv[1]
 outfile = sys.argv[2]
+startindex = int(sys.argv[3])
 
 i_type = {
         'lb': 1, 
@@ -107,7 +199,7 @@ for line in lines:
             rt = getRegNum(operands[1])
             imm = int(operands[2])
 
-        printIType(op, rs, rt, imm, outfile, line)
+        printIType(op, rs, rt, imm, outfile, line, instr, startindex)
 
     elif instr in r_type:
         op = 0
@@ -131,7 +223,9 @@ for line in lines:
         else: 
             print 'ERROR: R type instruction not found: ' + line
     
-        printRType(op, rs, rt, rd, shamt, funct, outfile, line)
+        printRType(op, rs, rt, rd, shamt, funct, outfile, line, instr, startindex)
 
     else:
         print "ERROR: Not in R or I " + line
+
+    startindex += 1
