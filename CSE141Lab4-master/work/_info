@@ -1,0 +1,258 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/modelsim17
+vALU
+Z0 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
+Z1 DXx4 work 11 definitions 0 22 FhF:Z@SO:fFlG5Fc]M;o02
+DXx4 work 11 ALU_sv_unit 0 22 [HjeMElDi;M0ldhj9clGe2
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+r1
+!s85 0
+31
+!i10b 1
+!s100 nZbi8^9@^1_GYmm:9MTZ93
+I2I9?Z0JRkLfSzlGd]iK7[0
+!s105 ALU_sv_unit
+S1
+Z3 dC:/Users/ajrengar/Desktop/CSE141Lab4-master
+Z4 w1544656379
+Z5 8C:\Users\ajrengar\Desktop\CSE141Lab4-master\ALU.sv
+Z6 FC:\Users\ajrengar\Desktop\CSE141Lab4-master\ALU.sv
+L0 10
+Z7 OV;L;10.5b;63
+Z8 !s108 1544663276.000000
+Z9 !s107 C:\Users\ajrengar\Desktop\CSE141Lab4-master\ALU.sv|
+Z10 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:\Users\ajrengar\Desktop\CSE141Lab4-master\ALU.sv|
+!i113 1
+Z11 o-work work -sv
+Z12 tCvgOpt 0
+n@a@l@u
+XALU_sv_unit
+R0
+R1
+V[HjeMElDi;M0ldhj9clGe2
+r1
+!s85 0
+31
+!i10b 1
+!s100 W2n;zJB9;E`hD6z8aZgAj3
+I[HjeMElDi;M0ldhj9clGe2
+!i103 1
+S1
+R3
+R4
+R5
+R6
+L0 9
+R7
+R8
+R9
+R10
+!i113 1
+R11
+R12
+n@a@l@u_sv_unit
+vCtrl
+R0
+R1
+DXx4 work 12 Ctrl_sv_unit 0 22 gMWY2Bf`L4k@=80SgjG1h1
+R2
+r1
+!s85 0
+31
+!i10b 1
+!s100 CDO]laGkHzK<1oh1n=VZ33
+I3JIAKNoQPCBVRMkm9bSLT0
+!s105 Ctrl_sv_unit
+S1
+R3
+Z13 w1544661842
+Z14 8C:\Users\ajrengar\Desktop\CSE141Lab4-master\Ctrl.sv
+Z15 FC:\Users\ajrengar\Desktop\CSE141Lab4-master\Ctrl.sv
+L0 5
+R7
+Z16 !s108 1544663255.000000
+Z17 !s107 C:\Users\ajrengar\Desktop\CSE141Lab4-master\Ctrl.sv|
+Z18 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:\Users\ajrengar\Desktop\CSE141Lab4-master\Ctrl.sv|
+!i113 1
+R11
+R12
+n@ctrl
+XCtrl_sv_unit
+R0
+R1
+VgMWY2Bf`L4k@=80SgjG1h1
+r1
+!s85 0
+31
+!i10b 1
+!s100 PI6lD6C=oB`TJa^D34ZK<0
+IgMWY2Bf`L4k@=80SgjG1h1
+!i103 1
+S1
+R3
+R13
+R14
+R15
+L0 1
+R7
+R16
+R17
+R18
+!i113 1
+R11
+R12
+n@ctrl_sv_unit
+vdata_mem
+R0
+Z19 !s110 1544663255
+!i10b 1
+!s100 kO[b1@FC0_NSl4>FQTR][1
+I:lWBPXz=@?5mI3_?GdG?c1
+R2
+!s105 data_mem28229_sv_unit
+S1
+R3
+Z20 w1543866280
+8C:/Users/ajrengar/Desktop/CSE141Lab4-master/data_mem(2).sv
+FC:/Users/ajrengar/Desktop/CSE141Lab4-master/data_mem(2).sv
+L0 5
+R7
+r1
+!s85 0
+31
+R16
+!s107 C:/Users/ajrengar/Desktop/CSE141Lab4-master/data_mem(2).sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/ajrengar/Desktop/CSE141Lab4-master/data_mem(2).sv|
+!i113 1
+R11
+R12
+Xdefinitions
+R0
+R19
+!i10b 1
+!s100 917VPe2ZL[>Io48FjzPD63
+IFhF:Z@SO:fFlG5Fc]M;o02
+VFhF:Z@SO:fFlG5Fc]M;o02
+S1
+R3
+w1544605468
+8C:\Users\ajrengar\Desktop\CSE141Lab4-master\definitions.sv
+FC:\Users\ajrengar\Desktop\CSE141Lab4-master\definitions.sv
+L0 2
+R7
+r1
+!s85 0
+31
+R16
+!s107 C:\Users\ajrengar\Desktop\CSE141Lab4-master\definitions.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|C:\Users\ajrengar\Desktop\CSE141Lab4-master\definitions.sv|
+!i113 1
+R11
+R12
+vIF
+R0
+R19
+!i10b 1
+!s100 SO0i_IPK@UB4;jTa9C8Oo2
+IAJOVf<e;Q:>ZGNNlIUa<e2
+R2
+!s105 IF_sv_unit
+S1
+R3
+w1544587942
+8C:\Users\ajrengar\Desktop\CSE141Lab4-master\IF.sv
+FC:\Users\ajrengar\Desktop\CSE141Lab4-master\IF.sv
+L0 11
+R7
+r1
+!s85 0
+31
+R16
+!s107 C:\Users\ajrengar\Desktop\CSE141Lab4-master\IF.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|C:\Users\ajrengar\Desktop\CSE141Lab4-master\IF.sv|
+!i113 1
+R11
+R12
+n@i@f
+vInstROM
+R0
+R19
+!i10b 1
+!s100 8K6CLL461Leb1e@CID0Ag3
+I];3=UP5BS367W9QWibV@[3
+R2
+!s105 InstROM_sv_unit
+S1
+R3
+R20
+8C:/Users/ajrengar/Desktop/CSE141Lab4-master/InstROM.sv
+FC:/Users/ajrengar/Desktop/CSE141Lab4-master/InstROM.sv
+L0 14
+R7
+r1
+!s85 0
+31
+R16
+!s107 C:/Users/ajrengar/Desktop/CSE141Lab4-master/InstROM.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/ajrengar/Desktop/CSE141Lab4-master/InstROM.sv|
+!i113 1
+R11
+R12
+n@inst@r@o@m
+vreg_file
+R0
+R19
+!i10b 1
+!s100 @9?Kf7_lLNi[iT`DlckkR3
+Ij:GSC9_]Wo1cMhhAB81n72
+R2
+!s105 reg_file_sv_unit
+S1
+R3
+w1544590816
+8C:\Users\ajrengar\Desktop\CSE141Lab4-master\reg_file.sv
+FC:\Users\ajrengar\Desktop\CSE141Lab4-master\reg_file.sv
+L0 7
+R7
+r1
+!s85 0
+31
+R16
+!s107 C:\Users\ajrengar\Desktop\CSE141Lab4-master\reg_file.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|C:\Users\ajrengar\Desktop\CSE141Lab4-master\reg_file.sv|
+!i113 1
+R11
+R12
+vTopLevel
+R0
+R19
+!i10b 1
+!s100 02X;P?lQMJh3^n2MFRSnW0
+I5a:P0H:BN`LdD_VOB9TU^3
+R2
+!s105 TopLevel_sv_unit
+S1
+R3
+w1544656299
+8C:\Users\ajrengar\Desktop\CSE141Lab4-master\TopLevel.sv
+FC:\Users\ajrengar\Desktop\CSE141Lab4-master\TopLevel.sv
+L0 25
+R7
+r1
+!s85 0
+31
+R16
+!s107 C:\Users\ajrengar\Desktop\CSE141Lab4-master\TopLevel.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|C:\Users\ajrengar\Desktop\CSE141Lab4-master\TopLevel.sv|
+!i113 1
+R11
+R12
+n@top@level

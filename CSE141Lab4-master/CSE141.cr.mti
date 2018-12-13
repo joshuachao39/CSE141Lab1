@@ -1,0 +1,38 @@
+C:/Users/ajrengar/Desktop/CSE141Lab4-master/ALU.sv {1 {vlog -work work -sv -stats=none C:/Users/ajrengar/Desktop/CSE141Lab4-master/ALU.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling package ALU_sv_unit
+-- Importing package definitions
+-- Compiling module ALU
+
+Top level modules:
+	ALU
+
+} {} {}} C:/Users/ajrengar/Desktop/CSE141Lab4-master/IF.sv {1 {vlog -work work -sv -stats=none C:/Users/ajrengar/Desktop/CSE141Lab4-master/IF.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module IF
+
+Top level modules:
+	IF
+
+} {} {}} C:/Users/ajrengar/Desktop/CSE141Lab4-master/TopLevel.sv {1 {vlog -work work -sv -stats=none C:/Users/ajrengar/Desktop/CSE141Lab4-master/TopLevel.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module TopLevel
+
+Top level modules:
+	TopLevel
+
+} {} {}} C:/Users/ajrengar/Desktop/CSE141Lab4-master/definitions.sv {1 {vlog -work work -sv -stats=none C:/Users/ajrengar/Desktop/CSE141Lab4-master/definitions.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling package definitions
+
+Top level modules:
+	--none--
+
+} {} {}} C:/Users/ajrengar/Desktop/CSE141Lab4-master/reg_file.sv {1 {vlog -work work -sv -stats=none C:/Users/ajrengar/Desktop/CSE141Lab4-master/reg_file.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module reg_file
+
+Top level modules:
+	reg_file
+
+} {} {}}
